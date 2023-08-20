@@ -6,6 +6,8 @@ char	equal(char *str)
 	int	i;
 	int	n;
 	char	*tecla;
+	char	*cero= " ";
+	char	*uno= ".,!?";
 	char	*dos = "ABC";
 	char	*tres = "DEF";
 	char	*cuatro = "GHI";
@@ -17,6 +19,13 @@ char	equal(char *str)
 
 	switch (str[0])
 	{
+
+		case '0':
+			tecla = cero;
+			break;
+		case '1':
+			tecla = uno;
+			break;
 		case '2':
 			tecla = dos;
 			break;

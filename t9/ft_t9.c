@@ -15,7 +15,7 @@ static int	checkvalidinput(char *str)
 		return (0);
 	while (str[i])
 	{
-		if ((str[i] > '1' && str[i] <= '9') || str[i] == '-')
+		if ((str[i] >= '0' && str[i] <= '9') || str[i] == '-')
 			i++;
 		else if (str[i] == '-')
 			n++;
@@ -25,7 +25,7 @@ static int	checkvalidinput(char *str)
 	return (1);
 }
 
-static int	setblock(char *dest, char *src)
+static int	setblock(char **dest, const char *src)
 {
 	int	i;
 	int	len;
@@ -34,22 +34,22 @@ static int	setblock(char *dest, char *src)
 	while (src[i] && src[i] != '-')
 		i++;
 	len = i;
-	dest = (char *)malloc(sizeof(char) * len + 1);
-	if (!dest)
+	*dest = (char *)malloc(sizeof(char) * (len + 1));
+	if (!*dest)
 		return(0);
 	i = 0;
-	while (src[i] && src[i] != '-')
+	while (src[i] && (src[i] != '-'))
 	{
-		dest[i] = src[i];
+		(*dest)[i] = src[i];
 		i++;
 	}
-	dest[i] = '\0';
+	(*dest)[i] = '\0';
 	i--;
 	if (i > 1)
 	{
 		while (i > 0)
 		{
-			if (src[i] != dest[i])
+			if (src[i] != (*dest)[i])
 				return (-1);
 			i--;
 		}
@@ -77,11 +77,11 @@ char	*ft_t9(char *str)
 	msg = (char *)malloc(sizeof(char) * msglen);
 		if (!msg)
 			return (NULL);
-	while (str[i])
+	while (i < len)
 	{
 		if (str[i] != '-')
 		{
-			i = setblock(block, str + i);
+			i += setblock(&block, str + i);
 			if (i < 0)
 			{
 				printf("numbers in blocks must be equal");

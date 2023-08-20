@@ -7,6 +7,6 @@ int	main(int ac, char **av)
 	{
 		char	*msg;
 		msg = ft_t9(av[1]);
-		printf("%s", msg);
+		printf("%s\n", msg);
 	}
 }
