@@ -17,12 +17,32 @@ static int	checkvalidinput(char *str)
 	{
 		if ((str[i] >= '0' && str[i] <= '9') || str[i] == '-')
 			i++;
-		else if (str[i] == '-')
-			n++;
 		else
-			return(0);
+			return (0);
+		if ((isdigit(str[i]) && isdigit(str[i - 1])) && (str[i] != str[i - 1]))
+			return (0);
+		if (str[i] == '-' && str[i - 1] == '-')
+			return (0);
 	}
+	if (str[i - 1] == '-')
+		return (0);
 	return (1);
+}
+
+static int	msgsize(char *str)
+{
+	int	i;
+	int	n;
+
+	i = 0;
+	n = 1;
+	while (str[i])
+	{
+		if(str[i] == '-')
+			n++;
+		i++;
+	}
+	return (n);
 }
 
 static int	setblock(char **dest, const char *src)
@@ -31,29 +51,19 @@ static int	setblock(char **dest, const char *src)
 	int	len;
 
 	i = 0;
-	while (src[i] && src[i] != '-')
-		i++;
-	len = i;
+	len = 0;
+//	len = (strchr(src, '-') - src);
+	while (src[len] != '-')
+		len++;
 	*dest = (char *)malloc(sizeof(char) * (len + 1));
 	if (!*dest)
 		return(0);
-	i = 0;
 	while (src[i] && (src[i] != '-'))
 	{
 		(*dest)[i] = src[i];
 		i++;
 	}
 	(*dest)[i] = '\0';
-	i--;
-	if (i > 1)
-	{
-		while (i > 0)
-		{
-			if (src[i] != (*dest)[i])
-				return (-1);
-			i--;
-		}
-	}
 	return (len + 1);
 }
 
@@ -68,13 +78,14 @@ char	*ft_t9(char *str)
 
 	i = 0;
 	n = 0;
-	len = strlen(str);
-	if (!(msglen = checkvalidinput(str)))
+	if (!checkvalidinput(str))
 	{
-		printf("invalid input, only numbers between the symbol - accepted");
+		printf("invalid input:\n-only numbers\n-block numbers must be the same number\n-block separator must be '-' character\n-last character must be a number\n\n");
 		return (NULL);
 	}
-	msg = (char *)malloc(sizeof(char) * msglen);
+	len = strlen(str);
+	msglen = msgsize(str);
+	msg = (char *)malloc(sizeof(char) * (msglen + 1));
 		if (!msg)
 			return (NULL);
 	while (i < len)
