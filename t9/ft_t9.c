@@ -52,7 +52,6 @@ static int	setblock(char **dest, const char *src)
 
 	i = 0;
 	len = 0;
-//	len = (strchr(src, '-') - src);
 	while (src[len] != '-')
 		len++;
 	*dest = (char *)malloc(sizeof(char) * (len + 1));
